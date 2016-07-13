@@ -1,0 +1,37 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfAppPoC_2"
+        xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation" x:Class="WpfAppPoC_2.WinPaises"
+        mc:Ignorable="d"
+        Title="Paises" Height="558.285" Width="921.515">
+    <Grid Margin="0,0,2,0"> 
+
+        <telerik:RadGridView x:Name="RadGridPaises" Margin="10,10,10,71" ItemsSource="{Binding DataView, ElementName=paisesDataSource}" AutoGenerateColumns="False" BeginningEdit="RadGridView_BeginningEdit" DataLoading="RadGridPaises_DataLoading" DataLoaded="RadGridPaises_DataLoaded" SelectionChanged="RadGridPaises_SelectionChanged" AddingNewDataItem="RadGridPaises_AddingNewDataItem">
+            <telerik:RadGridView.Columns>
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding id}" Header="ID" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding descripcion}" Header="DESCRIPCION"/>
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding nacionalidad}" Header="NACIONALIDAD"/>
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding prefijo}" Header="PREFIJO"/>
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding paraisoFiscal}" Header="P. FISCAL"/>
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding noColaboraLd}" Header="NO COLAB. LD"/>
+            </telerik:RadGridView.Columns>
+        </telerik:RadGridView>
+        <telerik:RadDataPager Margin="10,0,371,33" Height="29" Source="{Binding DataView, ElementName=paisesDataSource}" VerticalAlignment="Bottom"/>
+
+        <telerik:RadDataServiceDataSource x:Name="paisesDataSource" PageSize="50" QueryName="Paises" AutoLoad="true">
+            <telerik:RadDataServiceDataSource.DataServiceContext>
+                <local:PaisesContext />
+            </telerik:RadDataServiceDataSource.DataServiceContext>
+        </telerik:RadDataServiceDataSource>
+        <telerik:RadButton x:Name="radBtnNuevo" Content="Nuevo" Margin="0,0,275,32" HorizontalAlignment="Right" Width="77" IsEnabled="False" Height="31" VerticalAlignment="Bottom" Click="RadBtnNuevoClick"/>
+        <telerik:RadButton x:Name="radBtnBorrar" Content="Borrar" Margin="0,0,193,32" HorizontalAlignment="Right" Width="77" IsEnabled="False" Height="31" VerticalAlignment="Bottom" Click="RadBtnBorrarClick"/>
+        <telerik:RadButton x:Name="radBtnGuardar" Content="Guardar" Margin="0,0,92,32" HorizontalAlignment="Right" Width="77" IsEnabled="False" Click="RadBtnGuardarClick" Height="31" VerticalAlignment="Bottom"/>
+        <telerik:RadButton x:Name="radBtnCancelar" Content="Cancelar" Margin="0,0,10,32" HorizontalAlignment="Right" Width="77" IsEnabled="False" Height="31" VerticalAlignment="Bottom" Click="RadBtnCancelarClick"/>
+        <StatusBar x:Name="BarraEstado" Height="23" VerticalAlignment="Bottom">
+            <StatusBarItem x:Name="BarraEstadoItem" Content="NO DEFINIDO" Height="23" VerticalAlignment="Top"/>
+        </StatusBar>
+    </Grid>
+</Window>
