@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generation date: 07/07/2016 12:25:07 p.m.
+// Generation date: 28/07/2016 10:18:36 a.m.
 namespace Servicios
 {
     /// <summary>
@@ -77,12 +77,62 @@ namespace Servicios
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.OData.Client.Design.T4", "2.4.0")]
         private global::Microsoft.OData.Client.DataServiceQuery<Pais> _Paises;
         /// <summary>
+        /// There are no comments for Provincias in the schema.
+        /// </summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.OData.Client.Design.T4", "2.4.0")]
+        public global::Microsoft.OData.Client.DataServiceQuery<Provincia> Provincias
+        {
+            get
+            {
+                if ((this._Provincias == null))
+                {
+                    this._Provincias = base.CreateQuery<Provincia>("Provincias");
+                }
+                return this._Provincias;
+            }
+        }
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.OData.Client.Design.T4", "2.4.0")]
+        private global::Microsoft.OData.Client.DataServiceQuery<Provincia> _Provincias;
+        /// <summary>
+        /// There are no comments for Localidades in the schema.
+        /// </summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.OData.Client.Design.T4", "2.4.0")]
+        public global::Microsoft.OData.Client.DataServiceQuery<Localidad> Localidades
+        {
+            get
+            {
+                if ((this._Localidades == null))
+                {
+                    this._Localidades = base.CreateQuery<Localidad>("Localidades");
+                }
+                return this._Localidades;
+            }
+        }
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.OData.Client.Design.T4", "2.4.0")]
+        private global::Microsoft.OData.Client.DataServiceQuery<Localidad> _Localidades;
+        /// <summary>
         /// There are no comments for Paises in the schema.
         /// </summary>
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.OData.Client.Design.T4", "2.4.0")]
         public void AddToPaises(Pais pais)
         {
             base.AddObject("Paises", pais);
+        }
+        /// <summary>
+        /// There are no comments for Provincias in the schema.
+        /// </summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.OData.Client.Design.T4", "2.4.0")]
+        public void AddToProvincias(Provincia provincia)
+        {
+            base.AddObject("Provincias", provincia);
+        }
+        /// <summary>
+        /// There are no comments for Localidades in the schema.
+        /// </summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.OData.Client.Design.T4", "2.4.0")]
+        public void AddToLocalidades(Localidad localidad)
+        {
+            base.AddObject("Localidades", localidad);
         }
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.OData.Client.Design.T4", "2.4.0")]
         private abstract class GeneratedEdmModel
@@ -98,14 +148,46 @@ namespace Servicios
           <PropertyRef Name=""id""></PropertyRef>
         </Key>
         <Property Name=""id"" Type=""Edm.Int32"" Nullable=""true""></Property>
-        <Property Name=""descripcion"" Type=""Edm.String"" Nullable=""false""></Property>
+        <Property Name=""descripcion"" Type=""Edm.String"" Nullable=""true""></Property>
         <Property Name=""nacionalidad"" Type=""Edm.String"" Nullable=""true""></Property>
         <Property Name=""prefijo"" Type=""Edm.Int32"" Nullable=""true""></Property>
         <Property Name=""paraisoFiscal"" Type=""Edm.Boolean"" Nullable=""true""></Property>
         <Property Name=""noColaboraLd"" Type=""Edm.Boolean"" Nullable=""true""></Property>
       </EntityType>
+      <EntityType Name=""Provincia"">
+        <Key>
+          <PropertyRef Name=""id""></PropertyRef>
+          <PropertyRef Name=""paisID""></PropertyRef>
+        </Key>
+        <Property Name=""id"" Type=""Edm.Int32"" Nullable=""true""></Property>
+        <Property Name=""paisID"" Type=""Edm.Int32"" Nullable=""true""></Property>
+        <NavigationProperty Name=""pais"" Type=""com.cairone.sdlpocjpa.Pais"" Nullable=""true""></NavigationProperty>
+        <Property Name=""descripcion"" Type=""Edm.String"" Nullable=""false""></Property>
+        <Property Name=""descripcionReducida"" Type=""Edm.String"" Nullable=""false""></Property>
+      </EntityType>
+      <EntityType Name=""Localidad"">
+        <Key>
+          <PropertyRef Name=""paisID""></PropertyRef>
+          <PropertyRef Name=""provinciaID""></PropertyRef>
+          <PropertyRef Name=""codigoPostal""></PropertyRef>
+        </Key>
+        <Property Name=""paisID"" Type=""Edm.Int32"" Nullable=""true""></Property>
+        <Property Name=""provinciaID"" Type=""Edm.Int32"" Nullable=""true""></Property>
+        <Property Name=""codigoPostal"" Type=""Edm.String"" Nullable=""true""></Property>
+        <NavigationProperty Name=""pais"" Type=""com.cairone.sdlpocjpa.Pais"" Nullable=""true""></NavigationProperty>
+        <NavigationProperty Name=""provincia"" Type=""com.cairone.sdlpocjpa.Provincia"" Nullable=""true""></NavigationProperty>
+        <Property Name=""descripcion"" Type=""Edm.String"" Nullable=""true""></Property>
+        <Property Name=""prefijo"" Type=""Edm.Int32"" Nullable=""true""></Property>
+      </EntityType>
       <EntityContainer Name=""SDLPoC"">
         <EntitySet Name=""Paises"" EntityType=""com.cairone.sdlpocjpa.Pais""></EntitySet>
+        <EntitySet Name=""Provincias"" EntityType=""com.cairone.sdlpocjpa.Provincia"">
+          <NavigationPropertyBinding Path=""pais"" Target=""Paises""></NavigationPropertyBinding>
+        </EntitySet>
+        <EntitySet Name=""Localidades"" EntityType=""com.cairone.sdlpocjpa.Localidad"">
+          <NavigationPropertyBinding Path=""pais"" Target=""Paises""></NavigationPropertyBinding>
+          <NavigationPropertyBinding Path=""provincia"" Target=""Provincias""></NavigationPropertyBinding>
+        </EntitySet>
       </EntityContainer>
     </Schema>
   </edmx:DataServices>
@@ -169,17 +251,6 @@ namespace Servicios
     [global::Microsoft.OData.Client.EntitySet("Paises")]
     public partial class Pais : global::Microsoft.OData.Client.BaseEntityType, global::System.ComponentModel.INotifyPropertyChanged
     {
-        /// <summary>
-        /// Create a new Pais object.
-        /// </summary>
-        /// <param name="descripcion">Initial value of descripcion.</param>
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.OData.Client.Design.T4", "2.4.0")]
-        public static Pais CreatePais(string descripcion)
-        {
-            Pais pais = new Pais();
-            pais.descripcion = descripcion;
-            return pais;
-        }
         /// <summary>
         /// There are no comments for Property id in the schema.
         /// </summary>
@@ -331,6 +402,453 @@ namespace Servicios
         }
     }
     /// <summary>
+    /// There are no comments for ProvinciaSingle in the schema.
+    /// </summary>
+    public partial class ProvinciaSingle : global::Microsoft.OData.Client.DataServiceQuerySingle<Provincia>
+    {
+        /// <summary>
+        /// Initialize a new ProvinciaSingle object.
+        /// </summary>
+        public ProvinciaSingle(global::Microsoft.OData.Client.DataServiceContext context, string path)
+            : base(context, path) {}
+
+        /// <summary>
+        /// Initialize a new ProvinciaSingle object.
+        /// </summary>
+        public ProvinciaSingle(global::Microsoft.OData.Client.DataServiceContext context, string path, bool isComposable)
+            : base(context, path, isComposable) {}
+
+        /// <summary>
+        /// Initialize a new ProvinciaSingle object.
+        /// </summary>
+        public ProvinciaSingle(global::Microsoft.OData.Client.DataServiceQuerySingle<Provincia> query)
+            : base(query) {}
+
+        /// <summary>
+        /// There are no comments for pais in the schema.
+        /// </summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.OData.Client.Design.T4", "2.4.0")]
+        public global::Servicios.PaisSingle pais
+        {
+            get
+            {
+                if (!this.IsComposable)
+                {
+                    throw new global::System.NotSupportedException("The previous function is not composable.");
+                }
+                if ((this._pais == null))
+                {
+                    this._pais = new global::Servicios.PaisSingle(this.Context, GetPath("pais"));
+                }
+                return this._pais;
+            }
+        }
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.OData.Client.Design.T4", "2.4.0")]
+        private global::Servicios.PaisSingle _pais;
+    }
+    /// <summary>
+    /// There are no comments for Provincia in the schema.
+    /// </summary>
+    /// <KeyProperties>
+    /// id
+    /// paisID
+    /// </KeyProperties>
+    [global::Microsoft.OData.Client.Key("id", "paisID")]
+    [global::Microsoft.OData.Client.EntitySet("Provincias")]
+    public partial class Provincia : global::Microsoft.OData.Client.BaseEntityType, global::System.ComponentModel.INotifyPropertyChanged
+    {
+        /// <summary>
+        /// Create a new Provincia object.
+        /// </summary>
+        /// <param name="descripcion">Initial value of descripcion.</param>
+        /// <param name="descripcionReducida">Initial value of descripcionReducida.</param>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.OData.Client.Design.T4", "2.4.0")]
+        public static Provincia CreateProvincia(string descripcion, string descripcionReducida)
+        {
+            Provincia provincia = new Provincia();
+            provincia.descripcion = descripcion;
+            provincia.descripcionReducida = descripcionReducida;
+            return provincia;
+        }
+        /// <summary>
+        /// There are no comments for Property id in the schema.
+        /// </summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.OData.Client.Design.T4", "2.4.0")]
+        public global::System.Nullable<int> id
+        {
+            get
+            {
+                return this._id;
+            }
+            set
+            {
+                this.OnidChanging(value);
+                this._id = value;
+                this.OnidChanged();
+                this.OnPropertyChanged("id");
+            }
+        }
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.OData.Client.Design.T4", "2.4.0")]
+        private global::System.Nullable<int> _id;
+        partial void OnidChanging(global::System.Nullable<int> value);
+        partial void OnidChanged();
+        /// <summary>
+        /// There are no comments for Property paisID in the schema.
+        /// </summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.OData.Client.Design.T4", "2.4.0")]
+        public global::System.Nullable<int> paisID
+        {
+            get
+            {
+                return this._paisID;
+            }
+            set
+            {
+                this.OnpaisIDChanging(value);
+                this._paisID = value;
+                this.OnpaisIDChanged();
+                this.OnPropertyChanged("paisID");
+            }
+        }
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.OData.Client.Design.T4", "2.4.0")]
+        private global::System.Nullable<int> _paisID;
+        partial void OnpaisIDChanging(global::System.Nullable<int> value);
+        partial void OnpaisIDChanged();
+        /// <summary>
+        /// There are no comments for Property descripcion in the schema.
+        /// </summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.OData.Client.Design.T4", "2.4.0")]
+        public string descripcion
+        {
+            get
+            {
+                return this._descripcion;
+            }
+            set
+            {
+                this.OndescripcionChanging(value);
+                this._descripcion = value;
+                this.OndescripcionChanged();
+                this.OnPropertyChanged("descripcion");
+            }
+        }
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.OData.Client.Design.T4", "2.4.0")]
+        private string _descripcion;
+        partial void OndescripcionChanging(string value);
+        partial void OndescripcionChanged();
+        /// <summary>
+        /// There are no comments for Property descripcionReducida in the schema.
+        /// </summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.OData.Client.Design.T4", "2.4.0")]
+        public string descripcionReducida
+        {
+            get
+            {
+                return this._descripcionReducida;
+            }
+            set
+            {
+                this.OndescripcionReducidaChanging(value);
+                this._descripcionReducida = value;
+                this.OndescripcionReducidaChanged();
+                this.OnPropertyChanged("descripcionReducida");
+            }
+        }
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.OData.Client.Design.T4", "2.4.0")]
+        private string _descripcionReducida;
+        partial void OndescripcionReducidaChanging(string value);
+        partial void OndescripcionReducidaChanged();
+        /// <summary>
+        /// There are no comments for Property pais in the schema.
+        /// </summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.OData.Client.Design.T4", "2.4.0")]
+        public global::Servicios.Pais pais
+        {
+            get
+            {
+                return this._pais;
+            }
+            set
+            {
+                this.OnpaisChanging(value);
+                this._pais = value;
+                this.OnpaisChanged();
+                this.OnPropertyChanged("pais");
+            }
+        }
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.OData.Client.Design.T4", "2.4.0")]
+        private global::Servicios.Pais _pais;
+        partial void OnpaisChanging(global::Servicios.Pais value);
+        partial void OnpaisChanged();
+        /// <summary>
+        /// This event is raised when the value of the property is changed
+        /// </summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.OData.Client.Design.T4", "2.4.0")]
+        public event global::System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        /// <summary>
+        /// The value of the property is changed
+        /// </summary>
+        /// <param name="property">property name</param>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.OData.Client.Design.T4", "2.4.0")]
+        protected virtual void OnPropertyChanged(string property)
+        {
+            if ((this.PropertyChanged != null))
+            {
+                this.PropertyChanged(this, new global::System.ComponentModel.PropertyChangedEventArgs(property));
+            }
+        }
+    }
+    /// <summary>
+    /// There are no comments for LocalidadSingle in the schema.
+    /// </summary>
+    public partial class LocalidadSingle : global::Microsoft.OData.Client.DataServiceQuerySingle<Localidad>
+    {
+        /// <summary>
+        /// Initialize a new LocalidadSingle object.
+        /// </summary>
+        public LocalidadSingle(global::Microsoft.OData.Client.DataServiceContext context, string path)
+            : base(context, path) {}
+
+        /// <summary>
+        /// Initialize a new LocalidadSingle object.
+        /// </summary>
+        public LocalidadSingle(global::Microsoft.OData.Client.DataServiceContext context, string path, bool isComposable)
+            : base(context, path, isComposable) {}
+
+        /// <summary>
+        /// Initialize a new LocalidadSingle object.
+        /// </summary>
+        public LocalidadSingle(global::Microsoft.OData.Client.DataServiceQuerySingle<Localidad> query)
+            : base(query) {}
+
+        /// <summary>
+        /// There are no comments for pais in the schema.
+        /// </summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.OData.Client.Design.T4", "2.4.0")]
+        public global::Servicios.PaisSingle pais
+        {
+            get
+            {
+                if (!this.IsComposable)
+                {
+                    throw new global::System.NotSupportedException("The previous function is not composable.");
+                }
+                if ((this._pais == null))
+                {
+                    this._pais = new global::Servicios.PaisSingle(this.Context, GetPath("pais"));
+                }
+                return this._pais;
+            }
+        }
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.OData.Client.Design.T4", "2.4.0")]
+        private global::Servicios.PaisSingle _pais;
+        /// <summary>
+        /// There are no comments for provincia in the schema.
+        /// </summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.OData.Client.Design.T4", "2.4.0")]
+        public global::Servicios.ProvinciaSingle provincia
+        {
+            get
+            {
+                if (!this.IsComposable)
+                {
+                    throw new global::System.NotSupportedException("The previous function is not composable.");
+                }
+                if ((this._provincia == null))
+                {
+                    this._provincia = new global::Servicios.ProvinciaSingle(this.Context, GetPath("provincia"));
+                }
+                return this._provincia;
+            }
+        }
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.OData.Client.Design.T4", "2.4.0")]
+        private global::Servicios.ProvinciaSingle _provincia;
+    }
+    /// <summary>
+    /// There are no comments for Localidad in the schema.
+    /// </summary>
+    /// <KeyProperties>
+    /// paisID
+    /// provinciaID
+    /// codigoPostal
+    /// </KeyProperties>
+    [global::Microsoft.OData.Client.Key("paisID", "provinciaID", "codigoPostal")]
+    [global::Microsoft.OData.Client.EntitySet("Localidades")]
+    public partial class Localidad : global::Microsoft.OData.Client.BaseEntityType, global::System.ComponentModel.INotifyPropertyChanged
+    {
+        /// <summary>
+        /// There are no comments for Property paisID in the schema.
+        /// </summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.OData.Client.Design.T4", "2.4.0")]
+        public global::System.Nullable<int> paisID
+        {
+            get
+            {
+                return this._paisID;
+            }
+            set
+            {
+                this.OnpaisIDChanging(value);
+                this._paisID = value;
+                this.OnpaisIDChanged();
+                this.OnPropertyChanged("paisID");
+            }
+        }
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.OData.Client.Design.T4", "2.4.0")]
+        private global::System.Nullable<int> _paisID;
+        partial void OnpaisIDChanging(global::System.Nullable<int> value);
+        partial void OnpaisIDChanged();
+        /// <summary>
+        /// There are no comments for Property provinciaID in the schema.
+        /// </summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.OData.Client.Design.T4", "2.4.0")]
+        public global::System.Nullable<int> provinciaID
+        {
+            get
+            {
+                return this._provinciaID;
+            }
+            set
+            {
+                this.OnprovinciaIDChanging(value);
+                this._provinciaID = value;
+                this.OnprovinciaIDChanged();
+                this.OnPropertyChanged("provinciaID");
+            }
+        }
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.OData.Client.Design.T4", "2.4.0")]
+        private global::System.Nullable<int> _provinciaID;
+        partial void OnprovinciaIDChanging(global::System.Nullable<int> value);
+        partial void OnprovinciaIDChanged();
+        /// <summary>
+        /// There are no comments for Property codigoPostal in the schema.
+        /// </summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.OData.Client.Design.T4", "2.4.0")]
+        public string codigoPostal
+        {
+            get
+            {
+                return this._codigoPostal;
+            }
+            set
+            {
+                this.OncodigoPostalChanging(value);
+                this._codigoPostal = value;
+                this.OncodigoPostalChanged();
+                this.OnPropertyChanged("codigoPostal");
+            }
+        }
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.OData.Client.Design.T4", "2.4.0")]
+        private string _codigoPostal;
+        partial void OncodigoPostalChanging(string value);
+        partial void OncodigoPostalChanged();
+        /// <summary>
+        /// There are no comments for Property descripcion in the schema.
+        /// </summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.OData.Client.Design.T4", "2.4.0")]
+        public string descripcion
+        {
+            get
+            {
+                return this._descripcion;
+            }
+            set
+            {
+                this.OndescripcionChanging(value);
+                this._descripcion = value;
+                this.OndescripcionChanged();
+                this.OnPropertyChanged("descripcion");
+            }
+        }
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.OData.Client.Design.T4", "2.4.0")]
+        private string _descripcion;
+        partial void OndescripcionChanging(string value);
+        partial void OndescripcionChanged();
+        /// <summary>
+        /// There are no comments for Property prefijo in the schema.
+        /// </summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.OData.Client.Design.T4", "2.4.0")]
+        public global::System.Nullable<int> prefijo
+        {
+            get
+            {
+                return this._prefijo;
+            }
+            set
+            {
+                this.OnprefijoChanging(value);
+                this._prefijo = value;
+                this.OnprefijoChanged();
+                this.OnPropertyChanged("prefijo");
+            }
+        }
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.OData.Client.Design.T4", "2.4.0")]
+        private global::System.Nullable<int> _prefijo;
+        partial void OnprefijoChanging(global::System.Nullable<int> value);
+        partial void OnprefijoChanged();
+        /// <summary>
+        /// There are no comments for Property pais in the schema.
+        /// </summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.OData.Client.Design.T4", "2.4.0")]
+        public global::Servicios.Pais pais
+        {
+            get
+            {
+                return this._pais;
+            }
+            set
+            {
+                this.OnpaisChanging(value);
+                this._pais = value;
+                this.OnpaisChanged();
+                this.OnPropertyChanged("pais");
+            }
+        }
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.OData.Client.Design.T4", "2.4.0")]
+        private global::Servicios.Pais _pais;
+        partial void OnpaisChanging(global::Servicios.Pais value);
+        partial void OnpaisChanged();
+        /// <summary>
+        /// There are no comments for Property provincia in the schema.
+        /// </summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.OData.Client.Design.T4", "2.4.0")]
+        public global::Servicios.Provincia provincia
+        {
+            get
+            {
+                return this._provincia;
+            }
+            set
+            {
+                this.OnprovinciaChanging(value);
+                this._provincia = value;
+                this.OnprovinciaChanged();
+                this.OnPropertyChanged("provincia");
+            }
+        }
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.OData.Client.Design.T4", "2.4.0")]
+        private global::Servicios.Provincia _provincia;
+        partial void OnprovinciaChanging(global::Servicios.Provincia value);
+        partial void OnprovinciaChanged();
+        /// <summary>
+        /// This event is raised when the value of the property is changed
+        /// </summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.OData.Client.Design.T4", "2.4.0")]
+        public event global::System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        /// <summary>
+        /// The value of the property is changed
+        /// </summary>
+        /// <param name="property">property name</param>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.OData.Client.Design.T4", "2.4.0")]
+        protected virtual void OnPropertyChanged(string property)
+        {
+            if ((this.PropertyChanged != null))
+            {
+                this.PropertyChanged(this, new global::System.ComponentModel.PropertyChangedEventArgs(property));
+            }
+        }
+    }
+    /// <summary>
     /// Class containing all extension methods
     /// </summary>
     public static class ExtensionMethods
@@ -357,6 +875,61 @@ namespace Servicios
                 { "id", id }
             };
             return new global::Servicios.PaisSingle(source.Context, source.GetKeyPath(global::Microsoft.OData.Client.Serializer.GetKeyString(source.Context, keys)));
+        }
+        /// <summary>
+        /// Get an entity of type global::Servicios.Provincia as global::Servicios.ProvinciaSingle specified by key from an entity set
+        /// </summary>
+        /// <param name="source">source entity set</param>
+        /// <param name="keys">dictionary with the names and values of keys</param>
+        public static global::Servicios.ProvinciaSingle ByKey(this global::Microsoft.OData.Client.DataServiceQuery<global::Servicios.Provincia> source, global::System.Collections.Generic.Dictionary<string, object> keys)
+        {
+            return new global::Servicios.ProvinciaSingle(source.Context, source.GetKeyPath(global::Microsoft.OData.Client.Serializer.GetKeyString(source.Context, keys)));
+        }
+        /// <summary>
+        /// Get an entity of type global::Servicios.Provincia as global::Servicios.ProvinciaSingle specified by key from an entity set
+        /// </summary>
+        /// <param name="source">source entity set</param>
+        /// <param name="id">The value of id</param>
+        /// <param name="paisID">The value of paisID</param>
+        public static global::Servicios.ProvinciaSingle ByKey(this global::Microsoft.OData.Client.DataServiceQuery<global::Servicios.Provincia> source,
+            global::System.Nullable<int> id, 
+            global::System.Nullable<int> paisID)
+        {
+            global::System.Collections.Generic.Dictionary<string, object> keys = new global::System.Collections.Generic.Dictionary<string, object>
+            {
+                { "id", id }, 
+                { "paisID", paisID }
+            };
+            return new global::Servicios.ProvinciaSingle(source.Context, source.GetKeyPath(global::Microsoft.OData.Client.Serializer.GetKeyString(source.Context, keys)));
+        }
+        /// <summary>
+        /// Get an entity of type global::Servicios.Localidad as global::Servicios.LocalidadSingle specified by key from an entity set
+        /// </summary>
+        /// <param name="source">source entity set</param>
+        /// <param name="keys">dictionary with the names and values of keys</param>
+        public static global::Servicios.LocalidadSingle ByKey(this global::Microsoft.OData.Client.DataServiceQuery<global::Servicios.Localidad> source, global::System.Collections.Generic.Dictionary<string, object> keys)
+        {
+            return new global::Servicios.LocalidadSingle(source.Context, source.GetKeyPath(global::Microsoft.OData.Client.Serializer.GetKeyString(source.Context, keys)));
+        }
+        /// <summary>
+        /// Get an entity of type global::Servicios.Localidad as global::Servicios.LocalidadSingle specified by key from an entity set
+        /// </summary>
+        /// <param name="source">source entity set</param>
+        /// <param name="paisID">The value of paisID</param>
+        /// <param name="provinciaID">The value of provinciaID</param>
+        /// <param name="codigoPostal">The value of codigoPostal</param>
+        public static global::Servicios.LocalidadSingle ByKey(this global::Microsoft.OData.Client.DataServiceQuery<global::Servicios.Localidad> source,
+            global::System.Nullable<int> paisID, 
+            global::System.Nullable<int> provinciaID, 
+            string codigoPostal)
+        {
+            global::System.Collections.Generic.Dictionary<string, object> keys = new global::System.Collections.Generic.Dictionary<string, object>
+            {
+                { "paisID", paisID }, 
+                { "provinciaID", provinciaID }, 
+                { "codigoPostal", codigoPostal }
+            };
+            return new global::Servicios.LocalidadSingle(source.Context, source.GetKeyPath(global::Microsoft.OData.Client.Serializer.GetKeyString(source.Context, keys)));
         }
     }
 }

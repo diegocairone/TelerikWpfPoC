@@ -105,7 +105,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="PaisesContext.cs" />
+    <Compile Include="ServiceContext.cs" />
     <Compile Include="Service References\OData Paises Service\Reference.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>

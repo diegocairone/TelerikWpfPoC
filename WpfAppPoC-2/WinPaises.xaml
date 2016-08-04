@@ -6,10 +6,11 @@
         xmlns:local="clr-namespace:WpfAppPoC_2"
         xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation" x:Class="WpfAppPoC_2.WinPaises"
         mc:Ignorable="d"
-        Title="Paises" Height="558.285" Width="921.515">
-    <Grid Margin="0,0,2,0"> 
+        Title="Paises" Height="541.285" Width="1059.515" Closing="Window_Closing">
+    <Grid Margin="0,0,2,0">
 
-        <telerik:RadGridView x:Name="RadGridPaises" Margin="10,10,10,71" ItemsSource="{Binding DataView, ElementName=paisesDataSource}" AutoGenerateColumns="False" BeginningEdit="RadGridView_BeginningEdit" DataLoading="RadGridPaises_DataLoading" DataLoaded="RadGridPaises_DataLoaded" SelectionChanged="RadGridPaises_SelectionChanged" AddingNewDataItem="RadGridPaises_AddingNewDataItem">
+        <telerik:RadGridView x:Name="RadGridPaises" Margin="10,10,10,71" ItemsSource="{Binding DataView, ElementName=paisesDataSource}" ShowGroupPanel="False" AutoGenerateColumns="False" SelectionChanged="RadGridPaises_SelectionChanged" AddingNewDataItem="RadGridPaises_AddingNewDataItem" CellEditEnded="RadGridPaises_CellEditEnded">
+
             <telerik:RadGridView.Columns>
                 <telerik:GridViewDataColumn DataMemberBinding="{Binding id}" Header="ID" />
                 <telerik:GridViewDataColumn DataMemberBinding="{Binding descripcion}" Header="DESCRIPCION"/>
@@ -19,19 +20,20 @@
                 <telerik:GridViewDataColumn DataMemberBinding="{Binding noColaboraLd}" Header="NO COLAB. LD"/>
             </telerik:RadGridView.Columns>
         </telerik:RadGridView>
-        <telerik:RadDataPager Margin="10,0,371,33" Height="29" Source="{Binding DataView, ElementName=paisesDataSource}" VerticalAlignment="Bottom"/>
+        <telerik:RadDataPager x:Name="RadPagerPaises" Margin="10,0,458,33" Height="29" Source="{Binding DataView, ElementName=paisesDataSource}" VerticalAlignment="Bottom"/>
 
-        <telerik:RadDataServiceDataSource x:Name="paisesDataSource" PageSize="50" QueryName="Paises" AutoLoad="true">
+        <telerik:RadDataServiceDataSource x:Name="paisesDataSource" PageSize="50" QueryName="Paises" AutoLoad="true" LoadingData="PaisesDataSource_LoadingData" LoadedData="PaisesDataSource_LoadedData" SubmittedChanges="PaisesDataSource_SubmittedChanges" SubmittingChanges="PaisesDataSource_SubmittingChanges">
             <telerik:RadDataServiceDataSource.DataServiceContext>
-                <local:PaisesContext />
+                <local:ServiceContext />
             </telerik:RadDataServiceDataSource.DataServiceContext>
         </telerik:RadDataServiceDataSource>
-        <telerik:RadButton x:Name="radBtnNuevo" Content="Nuevo" Margin="0,0,275,32" HorizontalAlignment="Right" Width="77" IsEnabled="False" Height="31" VerticalAlignment="Bottom" Click="RadBtnNuevoClick"/>
-        <telerik:RadButton x:Name="radBtnBorrar" Content="Borrar" Margin="0,0,193,32" HorizontalAlignment="Right" Width="77" IsEnabled="False" Height="31" VerticalAlignment="Bottom" Click="RadBtnBorrarClick"/>
-        <telerik:RadButton x:Name="radBtnGuardar" Content="Guardar" Margin="0,0,92,32" HorizontalAlignment="Right" Width="77" IsEnabled="False" Click="RadBtnGuardarClick" Height="31" VerticalAlignment="Bottom"/>
-        <telerik:RadButton x:Name="radBtnCancelar" Content="Cancelar" Margin="0,0,10,32" HorizontalAlignment="Right" Width="77" IsEnabled="False" Height="31" VerticalAlignment="Bottom" Click="RadBtnCancelarClick"/>
+        <telerik:RadButton x:Name="radBtnNuevo" Content="Nuevo" Margin="0,0,367,32" IsEnabled="False" Height="31" VerticalAlignment="Bottom" Click="RadBtnNuevoClick" HorizontalAlignment="Right" Width="77"/>
+        <telerik:RadButton x:Name="radBtnBorrar" Content="Borrar" Margin="0,0,285,32" IsEnabled="False" Height="31" VerticalAlignment="Bottom" Click="RadBtnBorrarClick" HorizontalAlignment="Right" Width="77"/>
+        <telerik:RadButton x:Name="radBtnGuardar" Content="Guardar" Margin="0,0,187,32" IsEnabled="False" Click="RadBtnGuardarClick" Height="31" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="77"/>
+        <telerik:RadButton x:Name="radBtnCerrar" Content="Cerrar" Margin="0,0,10,32" HorizontalAlignment="Right" Width="77" IsEnabled="False" Height="31" VerticalAlignment="Bottom" Click="RadBtnCerrarClick"/>
         <StatusBar x:Name="BarraEstado" Height="23" VerticalAlignment="Bottom">
             <StatusBarItem x:Name="BarraEstadoItem" Content="NO DEFINIDO" Height="23" VerticalAlignment="Top"/>
         </StatusBar>
+        <telerik:RadButton x:Name="radBtnCancelar" Content="Cancelar" Margin="0,0,105,32" IsEnabled="False" HorizontalAlignment="Right" Width="77" Height="31" VerticalAlignment="Bottom" Click="RadBtnCancelar_Click"/>
     </Grid>
 </Window>

@@ -1,16 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using Telerik.Windows.Controls.DataServices;
+using Telerik.Windows.Data;
 
 namespace WpfAppPoC_2
 {
@@ -21,72 +13,96 @@ namespace WpfAppPoC_2
     {
         private Boolean hayModificaciones = false;
 
+        private Boolean resStateRadGridPaises;
+        private Boolean resStateRadPager;
+        private Boolean resStateRadBtnNuevo;
+        private Boolean resStateRadBtnBorrar;
+        private Boolean resStateRadBtnGuardar;
+        private Boolean resStateRadBtnCancelar;
+        private Boolean resStateRadBtnCerrar;
+
         public WinPaises()
         {
             InitializeComponent();
+            LeerEstados();
+        }
+
+        private void LeerEstados()
+        {
+            this.resStateRadGridPaises = RadGridPaises.IsEnabled;
+            this.resStateRadPager = RadPagerPaises.IsEnabled;
+            this.resStateRadBtnNuevo = radBtnNuevo.IsEnabled;
+            this.resStateRadBtnBorrar = radBtnBorrar.IsEnabled;
+            this.resStateRadBtnGuardar = radBtnGuardar.IsEnabled;
+            this.resStateRadBtnCancelar = radBtnCancelar.IsEnabled;
+            this.resStateRadBtnCerrar = radBtnCerrar.IsEnabled;
+        }
+
+        private void Inhabilitar()
+        {
+            LeerEstados();
+
+            RadGridPaises.IsEnabled = false;
+            RadPagerPaises.IsEnabled = false;
+            radBtnNuevo.IsEnabled = false;
+            radBtnBorrar.IsEnabled = false;
+            radBtnGuardar.IsEnabled = false;
+            radBtnCancelar.IsEnabled = false;
+            radBtnCerrar.IsEnabled = false;
+        }
+
+        private void Rehabilitar()
+        {
+            RadGridPaises.IsEnabled = this.resStateRadGridPaises;
+            RadPagerPaises.IsEnabled = this.resStateRadPager;
+            radBtnNuevo.IsEnabled = this.resStateRadBtnNuevo;
+            radBtnBorrar.IsEnabled = this.resStateRadBtnBorrar;
+            radBtnGuardar.IsEnabled = this.resStateRadBtnGuardar;
+            radBtnCancelar.IsEnabled = this.resStateRadBtnCancelar;
+            radBtnCerrar.IsEnabled = this.resStateRadBtnCerrar;
         }
         
-        private void RadGridView_BeginningEdit(object sender, Telerik.Windows.Controls.GridViewBeginningEditRoutedEventArgs e)
+        private void PaisesDataSource_LoadingData(object sender, LoadingDataEventArgs e)
         {
-            this.hayModificaciones = true;
-
-            this.radBtnGuardar.IsEnabled = true;
-            this.radBtnCancelar.IsEnabled = true;
-
-            BarraEstadoItem.Content = "DATOS MODIFICADOS !!";
-        }
-
-        private void RadBtnGuardarClick(object sender, RoutedEventArgs e)
-        {
-            paisesDataSource.SubmitChanges();
-            hayModificaciones = false;
-        }
-
-        private void RadBtnCancelarClick(object sender, RoutedEventArgs e)
-        {
-            
-        }
-
-        private void RadGridPaises_DataLoading(object sender, Telerik.Windows.Controls.GridView.GridViewDataLoadingEventArgs e)
-        {
-            this.hayModificaciones = false;
-
-            this.radBtnNuevo.IsEnabled = false;
-            this.radBtnBorrar.IsEnabled = false;
-            this.radBtnGuardar.IsEnabled = false;
-            this.radBtnCancelar.IsEnabled = false;
-
+            Inhabilitar();
             BarraEstadoItem.Content = "RECIBIENDO DATOS ...";
-            System.Diagnostics.Debug.WriteLine(message: "Recibiendo..");
+            Console.WriteLine(value: "Data loading...");
         }
 
-        private void RadGridPaises_DataLoaded(object sender, EventArgs e)
+        private void PaisesDataSource_LoadedData(object sender, Telerik.Windows.Controls.DataServices.LoadedDataEventArgs e)
         {
-            this.hayModificaciones = false;
+            Rehabilitar();
 
-            this.radBtnNuevo.IsEnabled = true;
-            this.radBtnBorrar.IsEnabled = false;
-            this.radBtnGuardar.IsEnabled = false;
-            this.radBtnCancelar.IsEnabled = false;
+            hayModificaciones = false;
+            radBtnGuardar.IsEnabled = false;
+            radBtnCancelar.IsEnabled = false;
 
             BarraEstadoItem.Content = "LISTO";
-            System.Diagnostics.Debug.WriteLine(message: "Listo");
+            Console.WriteLine(value: "Data loaded.");
         }
 
-        private void RadGridPaises_SelectionChanged(object sender, Telerik.Windows.Controls.SelectionChangeEventArgs e)
+        private void PaisesDataSource_SubmittingChanges(object sender, DataServiceSubmittingChangesEventArgs e)
         {
-            this.radBtnBorrar.IsEnabled = RadGridPaises.SelectedItems.Count() != 0;
-            System.Diagnostics.Debug.WriteLine(format: "Filas seleccionadas {0}", args: new object[] { e.AddedItems.Count() });
+            Inhabilitar();
+            BarraEstadoItem.Content = "ENVIANDO DATOS DATOS ...";
+            Console.WriteLine(value: "Submitting ...");
+        }
+
+        private void PaisesDataSource_SubmittedChanges(object sender, DataServiceSubmittedChangesEventArgs e)
+        {
+            Rehabilitar();
+            Console.WriteLine(value: "Submitted.");
         }
 
         private void RadBtnNuevoClick(object sender, RoutedEventArgs e)
         {
             RadGridPaises.BeginInsert();
+            hayModificaciones = true;
         }
 
         private void RadBtnBorrarClick(object sender, RoutedEventArgs e)
         {
-            if(RadGridPaises.SelectedItems.Count == 0)
+            if (RadGridPaises.SelectedItems.Count == 0)
             {
                 return;
             }
@@ -103,14 +119,63 @@ namespace WpfAppPoC_2
                 (RadGridPaises.ItemsSource as Telerik.Windows.Data.DataItemCollection).Remove(item);
             }
 
+            this.radBtnGuardar.IsEnabled = true;
+            this.radBtnCancelar.IsEnabled = true;
+            this.hayModificaciones = true;
+        }
+
+        private void RadBtnGuardarClick(object sender, RoutedEventArgs e)
+        {
+            BarraEstadoItem.Content = "ENVIADO DATOS AL SERVIDOR";
             paisesDataSource.SubmitChanges();
-            hayModificaciones = false;
+        }
+
+        private void RadBtnCancelar_Click(object sender, RoutedEventArgs e)
+        {
+            paisesDataSource.RejectChanges();
+        }
+
+        private void RadBtnCerrarClick(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+        
+        private void RadGridPaises_CellEditEnded(object sender, Telerik.Windows.Controls.GridViewCellEditEndedEventArgs e)
+        {
+            radBtnGuardar.IsEnabled = true;
+            radBtnCancelar.IsEnabled = true;
+
+            hayModificaciones = true;
+
+            BarraEstadoItem.Content = "DATOS MODIFICADOS !!";
+            
+        }
+
+        private void RadGridPaises_SelectionChanged(object sender, Telerik.Windows.Controls.SelectionChangeEventArgs e)
+        {
+            this.radBtnBorrar.IsEnabled = RadGridPaises.SelectedItems.Count() != 0;
         }
 
         private void RadGridPaises_AddingNewDataItem(object sender, Telerik.Windows.Controls.GridView.GridViewAddingNewEventArgs e)
         {
-            var grid = e.OwnerGridViewItemsControl;
+            Telerik.Windows.Controls.GridView.GridViewDataControl grid = e.OwnerGridViewItemsControl;
             grid.CurrentColumn = grid.Columns[0];
+
+            hayModificaciones = true;
         }
+        
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (hayModificaciones)
+            {
+                MessageBoxResult result = MessageBox.Show(messageBoxText: "Hay cambios sin guardar. ¿Seguro que desea continuar?", caption: "Cerrar ventana", button: MessageBoxButton.YesNo, icon: MessageBoxImage.Warning, defaultResult: MessageBoxResult.No);
+
+                if (result == MessageBoxResult.No)
+                {
+                    e.Cancel = true;
+                }
+            }
+        }
+
     }
 }
