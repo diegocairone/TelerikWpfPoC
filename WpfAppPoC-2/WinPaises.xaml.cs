@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Linq;
 using System.Windows;
 using Telerik.Windows.Controls.DataServices;
@@ -71,11 +72,49 @@ namespace WpfAppPoC_2
 
         private void PaisesDataSource_LoadedData(object sender, Telerik.Windows.Controls.DataServices.LoadedDataEventArgs e)
         {
+            if (e.HasError)
+            {
+                e.MarkErrorAsHandled();
+
+                if (e.Error.InnerException is Microsoft.OData.Client.DataServiceClientException)
+                {
+                    var ex = e.Error.GetBaseException() as Microsoft.OData.Client.DataServiceClientException;
+
+                    String jsonResponse = ex.Message;
+                    OdataServiceSpringResponse response = JsonConvert.DeserializeObject<OdataServiceSpringResponse>(jsonResponse);
+
+                    MessageBoxResult result = MessageBox.Show(
+                        messageBoxText: response.Message,
+                        caption: "OCURRIO UN ERROR",
+                        button: MessageBoxButton.OK,
+                        icon: MessageBoxImage.Error);
+
+                } else if(e.Error.InnerException is Microsoft.OData.Client.DataServiceTransportException)
+                {
+                    var ex = e.Error.InnerException as Microsoft.OData.Client.DataServiceTransportException;
+
+                    MessageBoxResult result = MessageBox.Show(
+                        messageBoxText: ex.Message,
+                        caption: "OCURRIO UN ERROR",
+                        button: MessageBoxButton.OK,
+                        icon: MessageBoxImage.Error);
+                } else
+                {
+                    MessageBoxResult result = MessageBox.Show(
+                        messageBoxText: e.Error.Message,
+                        caption: "OCURRIO UN ERROR",
+                        button: MessageBoxButton.OK,
+                        icon: MessageBoxImage.Error);
+                }
+            }
+
             Rehabilitar();
 
             hayModificaciones = false;
+            radBtnNuevo.IsEnabled = true;
             radBtnGuardar.IsEnabled = false;
             radBtnCancelar.IsEnabled = false;
+            radBtnCerrar.IsEnabled = true;
 
             BarraEstadoItem.Content = "LISTO";
             Console.WriteLine(value: "Data loaded.");
@@ -90,6 +129,63 @@ namespace WpfAppPoC_2
 
         private void PaisesDataSource_SubmittedChanges(object sender, DataServiceSubmittedChangesEventArgs e)
         {
+            if (e.HasError)
+            {
+                e.MarkErrorAsHandled();
+                
+                if (e.Error.InnerException is Microsoft.OData.Client.DataServiceClientException)
+                {
+                    var ex = e.Error.GetBaseException() as Microsoft.OData.Client.DataServiceClientException;
+
+                    String jsonResponse = ex.Message;
+                    String message;
+
+                    switch (ex.StatusCode)
+                    {
+                        case 401:
+                            OdataServiceSpringResponse response401 = JsonConvert.DeserializeObject<OdataServiceSpringResponse>(jsonResponse);
+                            message = response401.Message;
+                            break;
+                        default:
+                            OdataServiceSdlResponse response = JsonConvert.DeserializeObject<OdataServiceSdlResponse>(jsonResponse);
+                            message = response.Error.Message;
+
+                            if(message.ToLower().Contains(value: "access is denied"))
+                            {
+                                message = "ACCESO DENEGADO";
+                            }
+
+                            break;
+                    }
+
+                    MessageBoxResult result = MessageBox.Show(
+                        messageBoxText: message,
+                        caption: "OCURRIO UN ERROR",
+                        button: MessageBoxButton.OK,
+                        icon: MessageBoxImage.Error);
+
+                }
+                else if (e.Error.InnerException is Microsoft.OData.Client.DataServiceTransportException)
+                {
+                    var ex = e.Error.InnerException as Microsoft.OData.Client.DataServiceTransportException;
+
+                    MessageBoxResult result = MessageBox.Show(
+                        messageBoxText: ex.Message,
+                        caption: "OCURRIO UN ERROR",
+                        button: MessageBoxButton.OK,
+                        icon: MessageBoxImage.Error);
+                }
+                else
+                {
+                    MessageBoxResult result = MessageBox.Show(
+                        messageBoxText: e.Error.Message,
+                        caption: "OCURRIO UN ERROR",
+                        button: MessageBoxButton.OK,
+                        icon: MessageBoxImage.Error);
+                }
+            }
+
+
             Rehabilitar();
             Console.WriteLine(value: "Submitted.");
         }

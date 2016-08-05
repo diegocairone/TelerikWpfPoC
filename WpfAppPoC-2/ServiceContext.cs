@@ -9,7 +9,8 @@ namespace WpfAppPoC_2
         {
             this.SendingRequest2 += (sender, eventArgs) =>
             {
-                var nc = new NetworkCredential(userName: "admin", password: "qwerty123");
+                var nc = new NetworkCredential(userName: "admin", password: "qwerty");
+                //var nc = new NetworkCredential(userName: "usuario", password: "asdfgh");
 
                 String token = nc.UserName + ":" + nc.Password;
 
