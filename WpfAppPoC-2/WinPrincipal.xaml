@@ -1,0 +1,40 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfAppPoC_2"
+        xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation" x:Name="WinPrincipal1" x:Class="WpfAppPoC_2.WinPrincipal"
+        mc:Ignorable="d"
+        Title="Ejemplo" Height="300" Width="300" WindowStartupLocation="CenterScreen" WindowState="Maximized">
+    <Window.DataContext>
+        <local:WinPrincipalViewModel />
+    </Window.DataContext>
+    <Grid>
+
+        <telerik:RadMenu HorizontalAlignment="Stretch" VerticalAlignment="Top">
+            <telerik:RadMenuItem Header="Aplicación">
+                <telerik:RadMenuItem Header="Salir" Click="RadMenuItemSalir_Click"/>
+            </telerik:RadMenuItem>
+            <telerik:RadMenuItem Header="Maestros">
+                <telerik:RadMenuItem Header="Paises" Command="{Binding PaisesCommand}" />
+                <telerik:RadMenuItem Header="Provincias"/>
+                <telerik:RadMenuItem Header="Localidades"/>
+            </telerik:RadMenuItem>
+        </telerik:RadMenu>
+
+        <telerik:RadDocking Margin="0,26,0,0" PanesSource="{Binding Panes}">
+            <telerik:RadDocking.DockingPanesFactory>
+                <local:CustomDockingPanesFactory />
+            </telerik:RadDocking.DockingPanesFactory>
+            
+            <telerik:RadDocking.DocumentHost>
+                <telerik:RadSplitContainer>
+                    <telerik:RadPaneGroup Name="mainGroup" telerik:RadDocking.SerializationTag="mainGroup">
+                        
+                    </telerik:RadPaneGroup>
+                </telerik:RadSplitContainer>
+            </telerik:RadDocking.DocumentHost>
+        </telerik:RadDocking>
+    </Grid>
+</Window>

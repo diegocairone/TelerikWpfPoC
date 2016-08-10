@@ -1,0 +1,29 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfAppPoC_2"
+        xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation" x:Class="WpfAppPoC_2.WinLogin"
+        mc:Ignorable="d"
+        Title="Acceso al Sistema" Height="177" Width="542" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="65*"/>
+            <RowDefinition Height="52*"/>
+            <RowDefinition Height="67*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="34*"/>
+            <ColumnDefinition Width="165*"/>
+        </Grid.ColumnDefinitions>
+        <Label x:Name="label" Content="Usuario" Margin="0,10,0,0" Height="26" VerticalAlignment="Top" HorizontalAlignment="Right" Width="82"/>
+        <Label x:Name="label1" Content="Contraseña" HorizontalAlignment="Right" Margin="0,8,0,0" Grid.Row="1" Width="82" Height="23" VerticalAlignment="Top"/>
+
+        <telerik:RadButton x:Name="RadBtnAceptar" Content="Aceptar" Grid.Column="1" HorizontalAlignment="Left" Margin="270,10,0,12" Grid.Row="2" Width="80" IsEnabled="False" Click="RadBtnAceptar_Click"/>
+        <telerik:RadButton x:Name="RadBtnSalir" Content="Salir" Grid.Column="1" Margin="355,10,10,12" Grid.Row="2" RenderTransformOrigin="1.976,-0.591" Click="RadBtnSalir_Click"/>
+        <TextBox x:Name="TxtUsuario" Grid.Column="1" Height="23" Margin="10,15,10,0" TextWrapping="Wrap" VerticalAlignment="Top" TextChanged="TxtUsuario_TextChanged"/>
+        <PasswordBox x:Name="TxtPassword" Grid.Column="1" Margin="10,8,10,0" Grid.Row="1" VerticalAlignment="Top" Height="23" PasswordChanged="TxtPassword_PasswordChanged"/>
+
+    </Grid>
+</Window>

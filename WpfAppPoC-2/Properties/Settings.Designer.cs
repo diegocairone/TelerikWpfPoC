@@ -26,9 +26,18 @@ namespace WpfAppPoC_2.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("http://eq016:8080/odata/PoCService.svc/")]
-        public string RestServiceUri {
+        public string OdataServiceUri {
             get {
-                return ((string)(this["RestServiceUri"]));
+                return ((string)(this["OdataServiceUri"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://eq016:8080/odata/echo/")]
+        public string EchoServiceUri {
+            get {
+                return ((string)(this["EchoServiceUri"]));
             }
         }
     }

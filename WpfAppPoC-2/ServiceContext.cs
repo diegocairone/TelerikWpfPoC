@@ -5,21 +5,11 @@ namespace WpfAppPoC_2
 {
     class ServiceContext : Servicios.SDLPoC
     {
-        public ServiceContext() : base(new Uri(Properties.Settings.Default.RestServiceUri))
+        public ServiceContext() : base(new Uri(Properties.Settings.Default.OdataServiceUri))
         {
             this.SendingRequest2 += (sender, eventArgs) =>
             {
-                var nc = new NetworkCredential(userName: "admin", password: "qwerty");
-                //var nc = new NetworkCredential(userName: "usuario", password: "asdfgh");
-
-                String token = nc.UserName + ":" + nc.Password;
-
-                String encoded = System
-                    .Convert
-                    .ToBase64String(System.Text.Encoding.GetEncoding(name: "ISO-8859-1")
-                    .GetBytes(token));
-
-                eventArgs.RequestMessage.SetHeader(headerName: "Authorization", headerValue: "Basic " + encoded);
+                eventArgs.RequestMessage.SetHeader(headerName: "Authorization", headerValue: "Basic " + Usuario.GetInstance().GetEncodedAuthToken());
             };
         }
         

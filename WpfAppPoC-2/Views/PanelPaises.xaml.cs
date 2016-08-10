@@ -2,15 +2,15 @@
 using System;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using Telerik.Windows.Controls.DataServices;
-using Telerik.Windows.Data;
 
 namespace WpfAppPoC_2
 {
     /// <summary>
-    /// Interaction logic for WinPaises.xaml
+    /// Interaction logic for PanelPaises.xaml
     /// </summary>
-    public partial class WinPaises : Window
+    public partial class PanelPaises : UserControl
     {
         private Boolean hayModificaciones = false;
 
@@ -20,13 +20,14 @@ namespace WpfAppPoC_2
         private Boolean resStateRadBtnBorrar;
         private Boolean resStateRadBtnGuardar;
         private Boolean resStateRadBtnCancelar;
-        private Boolean resStateRadBtnCerrar;
 
-        public WinPaises()
+        public PanelPaises()
         {
             InitializeComponent();
             LeerEstados();
         }
+
+        public Boolean HayModificaciones { get { return this.hayModificaciones; } } 
 
         private void LeerEstados()
         {
@@ -36,7 +37,6 @@ namespace WpfAppPoC_2
             this.resStateRadBtnBorrar = radBtnBorrar.IsEnabled;
             this.resStateRadBtnGuardar = radBtnGuardar.IsEnabled;
             this.resStateRadBtnCancelar = radBtnCancelar.IsEnabled;
-            this.resStateRadBtnCerrar = radBtnCerrar.IsEnabled;
         }
 
         private void Inhabilitar()
@@ -49,7 +49,6 @@ namespace WpfAppPoC_2
             radBtnBorrar.IsEnabled = false;
             radBtnGuardar.IsEnabled = false;
             radBtnCancelar.IsEnabled = false;
-            radBtnCerrar.IsEnabled = false;
         }
 
         private void Rehabilitar()
@@ -60,9 +59,8 @@ namespace WpfAppPoC_2
             radBtnBorrar.IsEnabled = this.resStateRadBtnBorrar;
             radBtnGuardar.IsEnabled = this.resStateRadBtnGuardar;
             radBtnCancelar.IsEnabled = this.resStateRadBtnCancelar;
-            radBtnCerrar.IsEnabled = this.resStateRadBtnCerrar;
         }
-        
+
         private void PaisesDataSource_LoadingData(object sender, LoadingDataEventArgs e)
         {
             Inhabilitar();
@@ -89,7 +87,8 @@ namespace WpfAppPoC_2
                         button: MessageBoxButton.OK,
                         icon: MessageBoxImage.Error);
 
-                } else if(e.Error.InnerException is Microsoft.OData.Client.DataServiceTransportException)
+                }
+                else if (e.Error.InnerException is Microsoft.OData.Client.DataServiceTransportException)
                 {
                     var ex = e.Error.InnerException as Microsoft.OData.Client.DataServiceTransportException;
 
@@ -98,7 +97,8 @@ namespace WpfAppPoC_2
                         caption: "OCURRIO UN ERROR",
                         button: MessageBoxButton.OK,
                         icon: MessageBoxImage.Error);
-                } else
+                }
+                else
                 {
                     MessageBoxResult result = MessageBox.Show(
                         messageBoxText: e.Error.Message,
@@ -114,7 +114,6 @@ namespace WpfAppPoC_2
             radBtnNuevo.IsEnabled = true;
             radBtnGuardar.IsEnabled = false;
             radBtnCancelar.IsEnabled = false;
-            radBtnCerrar.IsEnabled = true;
 
             BarraEstadoItem.Content = "LISTO";
             Console.WriteLine(value: "Data loaded.");
@@ -132,7 +131,7 @@ namespace WpfAppPoC_2
             if (e.HasError)
             {
                 e.MarkErrorAsHandled();
-                
+
                 if (e.Error.InnerException is Microsoft.OData.Client.DataServiceClientException)
                 {
                     var ex = e.Error.GetBaseException() as Microsoft.OData.Client.DataServiceClientException;
@@ -150,7 +149,7 @@ namespace WpfAppPoC_2
                             OdataServiceSdlResponse response = JsonConvert.DeserializeObject<OdataServiceSdlResponse>(jsonResponse);
                             message = response.Error.Message;
 
-                            if(message.ToLower().Contains(value: "access is denied"))
+                            if (message.ToLower().Contains(value: "access is denied"))
                             {
                                 message = "ACCESO DENEGADO";
                             }
@@ -233,9 +232,9 @@ namespace WpfAppPoC_2
 
         private void RadBtnCerrarClick(object sender, RoutedEventArgs e)
         {
-            Close();
+            //Close();
         }
-        
+
         private void RadGridPaises_CellEditEnded(object sender, Telerik.Windows.Controls.GridViewCellEditEndedEventArgs e)
         {
             radBtnGuardar.IsEnabled = true;
@@ -244,7 +243,7 @@ namespace WpfAppPoC_2
             hayModificaciones = true;
 
             BarraEstadoItem.Content = "DATOS MODIFICADOS !!";
-            
+
         }
 
         private void RadGridPaises_SelectionChanged(object sender, Telerik.Windows.Controls.SelectionChangeEventArgs e)
@@ -260,18 +259,5 @@ namespace WpfAppPoC_2
             hayModificaciones = true;
         }
         
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            if (hayModificaciones)
-            {
-                MessageBoxResult result = MessageBox.Show(messageBoxText: "Hay cambios sin guardar. ¿Seguro que desea continuar?", caption: "Cerrar ventana", button: MessageBoxButton.YesNo, icon: MessageBoxImage.Warning, defaultResult: MessageBoxResult.No);
-
-                if (result == MessageBoxResult.No)
-                {
-                    e.Cancel = true;
-                }
-            }
-        }
-
     }
 }
