@@ -111,6 +111,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="CustomDockingPanesFactory.cs" />
+    <Compile Include="IPanel.cs" />
     <Compile Include="OdataServiceSdlErrorResponse.cs" />
     <Compile Include="OdataServiceSdlResponse.cs" />
     <Compile Include="OdataServiceSpringResponse.cs" />
@@ -126,6 +127,9 @@
     </Compile>
     <Compile Include="Usuario.cs" />
     <Compile Include="ViewModel\WinPrincipalViewModel.cs" />
+    <Compile Include="Views\PanelProvincias.xaml.cs">
+      <DependentUpon>PanelProvincias.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WinLogin.xaml.cs">
       <DependentUpon>WinLogin.xaml</DependentUpon>
     </Compile>
@@ -180,6 +184,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Views\PanelPaises.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PanelProvincias.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

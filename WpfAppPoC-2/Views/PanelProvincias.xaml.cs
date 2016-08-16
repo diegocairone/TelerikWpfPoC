@@ -1,73 +1,71 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.OData.Client;
+using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using Telerik.Windows.Controls.DataServices;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+using Telerik.Windows.Data;
 
 namespace WpfAppPoC_2.Views
 {
     /// <summary>
-    /// Interaction logic for PanelPaises.xaml
+    /// Interaction logic for PanelProvincias.xaml
     /// </summary>
-    public partial class PanelPaises : UserControl, IPanel
+    public partial class PanelProvincias : UserControl, IPanel
     {
         private Boolean hayModificaciones = false;
 
-        private Boolean resStateRadGridPaises;
+        private Boolean resStateRadGridProvincias;
         private Boolean resStateRadPager;
         private Boolean resStateRadBtnNuevo;
         private Boolean resStateRadBtnBorrar;
         private Boolean resStateRadBtnGuardar;
         private Boolean resStateRadBtnCancelar;
         
-        public PanelPaises()
+        public PanelProvincias()
         {
             InitializeComponent();
-            LeerEstados();
         }
-
-        public Boolean HayModificaciones { get { return this.hayModificaciones; } } 
-
-        private void LeerEstados()
+        
+        private void PaisesComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            this.resStateRadGridPaises = RadGridPaises.IsEnabled;
-            this.resStateRadPager = RadPagerPaises.IsEnabled;
-            this.resStateRadBtnNuevo = radBtnNuevo.IsEnabled;
-            this.resStateRadBtnBorrar = radBtnBorrar.IsEnabled;
-            this.resStateRadBtnGuardar = radBtnGuardar.IsEnabled;
-            this.resStateRadBtnCancelar = radBtnCancelar.IsEnabled;
+            Servicios.Pais pais = e.AddedItems.Cast<Servicios.Pais>().FirstOrDefault();
+
+            if (pais != null)
+            {
+                FilterDescriptor df = provinciasDataSource.FilterDescriptors.Cast<FilterDescriptor>().FirstOrDefault();
+
+                if(df == null)
+                {
+                    df = new FilterDescriptor(member: "paisID", filterOperator: FilterOperator.IsEqualTo, filterValue: pais.id);
+                    
+                    provinciasDataSource.FilterDescriptors.Add(df);
+
+                } else
+                {
+                    df.Value = pais.id;
+                }
+            }            
         }
 
-        private void Inhabilitar()
-        {
-            LeerEstados();
-
-            RadGridPaises.IsEnabled = false;
-            RadPagerPaises.IsEnabled = false;
-            radBtnNuevo.IsEnabled = false;
-            radBtnBorrar.IsEnabled = false;
-            radBtnGuardar.IsEnabled = false;
-            radBtnCancelar.IsEnabled = false;
-        }
-
-        private void Rehabilitar()
-        {
-            RadGridPaises.IsEnabled = this.resStateRadGridPaises;
-            RadPagerPaises.IsEnabled = this.resStateRadPager;
-            radBtnNuevo.IsEnabled = this.resStateRadBtnNuevo;
-            radBtnBorrar.IsEnabled = this.resStateRadBtnBorrar;
-            radBtnGuardar.IsEnabled = this.resStateRadBtnGuardar;
-            radBtnCancelar.IsEnabled = this.resStateRadBtnCancelar;
-        }
-
-        private void PaisesDataSource_LoadingData(object sender, LoadingDataEventArgs e)
+        private void ProvinciasDataSource_LoadingData(object sender, Telerik.Windows.Controls.DataServices.LoadingDataEventArgs e)
         {
             Inhabilitar();
             BarraEstadoItem.Content = "RECIBIENDO DATOS ...";
         }
 
-        private void PaisesDataSource_LoadedData(object sender, Telerik.Windows.Controls.DataServices.LoadedDataEventArgs e)
+        private void ProvinciasDataSource_LoadedData(object sender, Telerik.Windows.Controls.DataServices.LoadedDataEventArgs e)
         {
             if (e.HasError)
             {
@@ -110,20 +108,22 @@ namespace WpfAppPoC_2.Views
             Rehabilitar();
 
             hayModificaciones = false;
-            radBtnNuevo.IsEnabled = true;
-            radBtnGuardar.IsEnabled = false;
-            radBtnCancelar.IsEnabled = false;
+            RadBtnNuevo.IsEnabled = true;
+            RadBtnGuardar.IsEnabled = false;
+            RadBtnCancelar.IsEnabled = false;
+
+            PaisesComboBox.IsEnabled = true;
 
             BarraEstadoItem.Content = "LISTO";
         }
-
-        private void PaisesDataSource_SubmittingChanges(object sender, DataServiceSubmittingChangesEventArgs e)
+        
+        private void ProvinciasDataSource_SubmittingChanges(object sender, Telerik.Windows.Controls.DataServices.DataServiceSubmittingChangesEventArgs e)
         {
             Inhabilitar();
             BarraEstadoItem.Content = "ENVIANDO DATOS DATOS ...";
         }
 
-        private void PaisesDataSource_SubmittedChanges(object sender, DataServiceSubmittedChangesEventArgs e)
+        private void ProvinciasDataSource_SubmittedChanges(object sender, Telerik.Windows.Controls.DataServices.DataServiceSubmittedChangesEventArgs e)
         {
             if (e.HasError)
             {
@@ -180,75 +180,111 @@ namespace WpfAppPoC_2.Views
                         icon: MessageBoxImage.Error);
                 }
             }
-
-
+            
             Rehabilitar();
         }
 
-        private void RadBtnNuevoClick(object sender, RoutedEventArgs e)
+        private void RadGridProvincias_AddingNewDataItem(object sender, Telerik.Windows.Controls.GridView.GridViewAddingNewEventArgs e)
         {
-            RadGridPaises.BeginInsert();
+            Telerik.Windows.Controls.GridView.GridViewDataControl grid = e.OwnerGridViewItemsControl;
+            grid.CurrentColumn = grid.Columns[0];
+
             hayModificaciones = true;
+            PaisesComboBox.IsEnabled = false;
         }
 
-        private void RadBtnBorrarClick(object sender, RoutedEventArgs e)
+        private void RadGridProvincias_CellEditEnded(object sender, Telerik.Windows.Controls.GridViewCellEditEndedEventArgs e)
         {
-            if (RadGridPaises.SelectedItems.Count == 0)
+            RadBtnGuardar.IsEnabled = true;
+            RadBtnCancelar.IsEnabled = true;
+
+            hayModificaciones = true;
+            PaisesComboBox.IsEnabled = false;
+
+            BarraEstadoItem.Content = "DATOS MODIFICADOS !!";
+        }
+
+        private void RadGridProvincias_SelectionChanged(object sender, Telerik.Windows.Controls.SelectionChangeEventArgs e)
+        {
+            this.RadBtnBorrar.IsEnabled = RadGridProvincias.SelectedItems.Count() != 0;
+        }
+
+        private void RadBtnNuevo_Click(object sender, RoutedEventArgs e)
+        {
+            RadGridProvincias.BeginInsert();
+            hayModificaciones = true;
+            PaisesComboBox.IsEnabled = false;
+        }
+
+        private void RadBtnBorrar_Click(object sender, RoutedEventArgs e)
+        {
+            if (RadGridProvincias.SelectedItems.Count == 0)
             {
                 return;
             }
 
             var itemsToRemove = new System.Collections.ObjectModel.ObservableCollection<object>();
 
-            foreach (var item in RadGridPaises.SelectedItems)
+            foreach (var item in RadGridProvincias.SelectedItems)
             {
                 itemsToRemove.Add(item);
             }
 
             foreach (var item in itemsToRemove)
             {
-                (RadGridPaises.ItemsSource as Telerik.Windows.Data.DataItemCollection).Remove(item);
+                (RadGridProvincias.ItemsSource as Telerik.Windows.Data.DataItemCollection).Remove(item);
             }
 
-            this.radBtnGuardar.IsEnabled = true;
-            this.radBtnCancelar.IsEnabled = true;
+            this.RadBtnGuardar.IsEnabled = true;
+            this.RadBtnCancelar.IsEnabled = true;
             this.hayModificaciones = true;
+            this.PaisesComboBox.IsEnabled = false;
         }
 
-        private void RadBtnGuardarClick(object sender, RoutedEventArgs e)
+        private void RadBtnGuardar_Click(object sender, RoutedEventArgs e)
         {
             BarraEstadoItem.Content = "ENVIADO DATOS AL SERVIDOR";
-            paisesDataSource.SubmitChanges();
+            provinciasDataSource.SubmitChanges();
         }
 
         private void RadBtnCancelar_Click(object sender, RoutedEventArgs e)
         {
-            paisesDataSource.RejectChanges();
+            provinciasDataSource.RejectChanges();
         }
-        
-        private void RadGridPaises_CellEditEnded(object sender, Telerik.Windows.Controls.GridViewCellEditEndedEventArgs e)
+
+        public Boolean HayModificaciones { get { return this.hayModificaciones; } }
+
+        private void LeerEstados()
         {
-            radBtnGuardar.IsEnabled = true;
-            radBtnCancelar.IsEnabled = true;
-
-            hayModificaciones = true;
-            
-            BarraEstadoItem.Content = "DATOS MODIFICADOS !!";
-
+            this.resStateRadGridProvincias = RadGridProvincias.IsEnabled;
+            this.resStateRadPager = RadPagerProvincias.IsEnabled;
+            this.resStateRadBtnNuevo = RadBtnNuevo.IsEnabled;
+            this.resStateRadBtnBorrar = RadBtnBorrar.IsEnabled;
+            this.resStateRadBtnGuardar = RadBtnGuardar.IsEnabled;
+            this.resStateRadBtnCancelar = RadBtnCancelar.IsEnabled;
         }
 
-        private void RadGridPaises_SelectionChanged(object sender, Telerik.Windows.Controls.SelectionChangeEventArgs e)
+        private void Inhabilitar()
         {
-            this.radBtnBorrar.IsEnabled = RadGridPaises.SelectedItems.Count() != 0;
+            LeerEstados();
+
+            RadGridProvincias.IsEnabled = false;
+            RadPagerProvincias.IsEnabled = false;
+            RadBtnNuevo.IsEnabled = false;
+            RadBtnBorrar.IsEnabled = false;
+            RadBtnGuardar.IsEnabled = false;
+            RadBtnCancelar.IsEnabled = false;
         }
 
-        private void RadGridPaises_AddingNewDataItem(object sender, Telerik.Windows.Controls.GridView.GridViewAddingNewEventArgs e)
+        private void Rehabilitar()
         {
-            Telerik.Windows.Controls.GridView.GridViewDataControl grid = e.OwnerGridViewItemsControl;
-            grid.CurrentColumn = grid.Columns[0];
-
-            hayModificaciones = true;
+            RadGridProvincias.IsEnabled = this.resStateRadGridProvincias;
+            RadPagerProvincias.IsEnabled = this.resStateRadPager;
+            RadBtnNuevo.IsEnabled = this.resStateRadBtnNuevo;
+            RadBtnBorrar.IsEnabled = this.resStateRadBtnBorrar;
+            RadBtnGuardar.IsEnabled = this.resStateRadBtnGuardar;
+            RadBtnCancelar.IsEnabled = this.resStateRadBtnCancelar;
         }
-        
+
     }
 }

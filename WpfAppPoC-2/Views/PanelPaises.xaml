@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WpfAppPoC_2"
-             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation" x:Class="WpfAppPoC_2.PanelPaises"
+             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation" x:Class="WpfAppPoC_2.Views.PanelPaises"
              mc:Ignorable="d" 
              d:DesignHeight="400" d:DesignWidth="900">
     <Grid Margin="0,0,0,0">

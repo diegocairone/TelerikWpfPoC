@@ -18,12 +18,12 @@
             </telerik:RadMenuItem>
             <telerik:RadMenuItem Header="Maestros">
                 <telerik:RadMenuItem Header="Paises" Command="{Binding PaisesCommand}" />
-                <telerik:RadMenuItem Header="Provincias"/>
+                <telerik:RadMenuItem Header="Provincias" Command="{Binding ProvinciasCommand}" />
                 <telerik:RadMenuItem Header="Localidades"/>
             </telerik:RadMenuItem>
         </telerik:RadMenu>
 
-        <telerik:RadDocking Margin="0,26,0,0" PanesSource="{Binding Panes}">
+        <telerik:RadDocking Margin="0,26,0,0" PanesSource="{Binding Panes}" PreviewClose="RadDocking_PreviewClose">
             <telerik:RadDocking.DockingPanesFactory>
                 <local:CustomDockingPanesFactory />
             </telerik:RadDocking.DockingPanesFactory>

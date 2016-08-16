@@ -107,7 +107,7 @@ namespace WpfAppPoC_2
                 }
             }
         }
-
+        
         [XmlIgnore]
         public Type ContentType
         {

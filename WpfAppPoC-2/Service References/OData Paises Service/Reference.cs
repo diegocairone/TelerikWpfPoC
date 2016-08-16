@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generation date: 28/07/2016 10:18:36 a.m.
+// Generation date: 12/08/2016 09:43:45 a.m.
 namespace Servicios
 {
     /// <summary>
@@ -162,8 +162,8 @@ namespace Servicios
         <Property Name=""id"" Type=""Edm.Int32"" Nullable=""true""></Property>
         <Property Name=""paisID"" Type=""Edm.Int32"" Nullable=""true""></Property>
         <NavigationProperty Name=""pais"" Type=""com.cairone.sdlpocjpa.Pais"" Nullable=""true""></NavigationProperty>
-        <Property Name=""descripcion"" Type=""Edm.String"" Nullable=""false""></Property>
-        <Property Name=""descripcionReducida"" Type=""Edm.String"" Nullable=""false""></Property>
+        <Property Name=""descripcion"" Type=""Edm.String"" Nullable=""true""></Property>
+        <Property Name=""descripcionReducida"" Type=""Edm.String"" Nullable=""true""></Property>
       </EntityType>
       <EntityType Name=""Localidad"">
         <Key>
@@ -457,19 +457,6 @@ namespace Servicios
     [global::Microsoft.OData.Client.EntitySet("Provincias")]
     public partial class Provincia : global::Microsoft.OData.Client.BaseEntityType, global::System.ComponentModel.INotifyPropertyChanged
     {
-        /// <summary>
-        /// Create a new Provincia object.
-        /// </summary>
-        /// <param name="descripcion">Initial value of descripcion.</param>
-        /// <param name="descripcionReducida">Initial value of descripcionReducida.</param>
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.OData.Client.Design.T4", "2.4.0")]
-        public static Provincia CreateProvincia(string descripcion, string descripcionReducida)
-        {
-            Provincia provincia = new Provincia();
-            provincia.descripcion = descripcion;
-            provincia.descripcionReducida = descripcionReducida;
-            return provincia;
-        }
         /// <summary>
         /// There are no comments for Property id in the schema.
         /// </summary>

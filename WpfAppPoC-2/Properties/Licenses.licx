@@ -3,3 +3,4 @@ Telerik.Windows.Controls.RadDataPager, Telerik.Windows.Controls.Data, Version=20
 Telerik.Windows.Controls.RadBusyIndicator, Telerik.Windows.Controls, Version=2016.2.613.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7
 Telerik.Windows.Controls.RadButton, Telerik.Windows.Controls, Version=2016.2.613.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7
 Telerik.Windows.Controls.RadMenu, Telerik.Windows.Controls.Navigation, Version=2016.2.613.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7
+Telerik.Windows.Controls.RadComboBox, Telerik.Windows.Controls.Input, Version=2016.2.613.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7
