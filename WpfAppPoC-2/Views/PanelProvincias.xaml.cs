@@ -119,6 +119,9 @@ namespace WpfAppPoC_2.Views
         
         private void ProvinciasDataSource_SubmittingChanges(object sender, Telerik.Windows.Controls.DataServices.DataServiceSubmittingChangesEventArgs e)
         {
+            // NECESARIO PARA ENVIAR HTTP PUT EN LUGAR DE HTTP PATCH
+            e.SaveChangesOptions = Microsoft.OData.Client.SaveChangesOptions.ReplaceOnUpdate;
+
             Inhabilitar();
             BarraEstadoItem.Content = "ENVIANDO DATOS DATOS ...";
         }
